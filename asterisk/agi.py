@@ -22,7 +22,7 @@ pyvr
 Specification
 -------------
 """
-
+from unidecode import unidecode
 import sys
 import pprint
 import re
@@ -49,6 +49,7 @@ class AGIUnknownError(AGIError):
 
 class AGIAppError(AGIError):
     pass
+
 
 # there are several different types of hangups we can detect
 # they all are derrived from AGIHangup
@@ -81,7 +82,7 @@ class AGIUsageError(AGIError):
 class AGIInvalidCommand(AGIError):
     pass
 
-        
+
 class AGI:
     """
     This class encapsulates communication between Asterisk an a python script.
@@ -108,7 +109,7 @@ class AGI:
             self.stderr.write(line)
             self.stderr.write('\n')
             if line == '':
-                #blank line signals end
+                # blank line signals end
                 break
             key, data = line.split(':')[0], ':'.join(line.split(':')[1:])
             key = key.strip()
@@ -122,10 +123,10 @@ class AGI:
     def _quote(self, string):
         """ provides double quotes to string, converts int/bool to string """
         if isinstance(string, int):
-          string = str(string)
+            string = str(string)
         if isinstance(string, float):
-          string = str(string)
-        return ''.join(['"', string.encode('utf8', 'ignore'), '"'])
+            string = str(string)
+        return ''.join(['"', unidecode(string), '"'])
 
     def _handle_sighup(self, signum, frame):
         """Handle the SIGHUP signal"""
@@ -290,7 +291,8 @@ class AGI:
         extension must not be included in the filename.
         """
         escape_digits = self._process_digit_list(escape_digits)
-        response = self.execute('CONTROL STREAM FILE', self._quote(filename), escape_digits, self._quote(skipms), self._quote(fwd), self._quote(rew), self._quote(pause))
+        response = self.execute('CONTROL STREAM FILE', self._quote(filename), escape_digits, self._quote(skipms),
+                                self._quote(fwd), self._quote(rew), self._quote(pause))
         res = response['result'][0]
         if res == '0':
             return ''
@@ -494,7 +496,8 @@ class AGI:
         self.set_extension(extension)
         self.set_priority(priority)
 
-    def record_file(self, filename, format='gsm', escape_digits='#', timeout=DEFAULT_RECORD, offset=0, beep='beep', silence=0):
+    def record_file(self, filename, format='gsm', escape_digits='#', timeout=DEFAULT_RECORD, offset=0, beep='beep',
+                    silence=0):
         """agi.record_file(filename, format, escape_digits, timeout=DEFAULT_TIMEOUT, offset=0, beep='beep', silence=0) --> None
         Record to a file until a given dtmf digit in the sequence is received. Returns
         '-1' on hangup or error.  The format will specify what kind of file will be
@@ -633,7 +636,8 @@ class AGI:
         elif res == '1':
             return value
         else:
-            raise AGIError('Unknown exception for : family=%s, key=%s, result=%s' % (family, key, pprint.pformat(result)))
+            raise AGIError(
+                'Unknown exception for : family=%s, key=%s, result=%s' % (family, key, pprint.pformat(result)))
 
     def database_put(self, family, key, value):
         """agi.database_put(family, key, value) --> None
@@ -683,24 +687,24 @@ class AGI:
 
 if __name__ == '__main__':
     agi = AGI()
-    #agi.appexec('festival','Welcome to Klass Technologies.  Thank you for calling.')
-    #agi.appexec('festival','This is a test of the text to speech engine.')
-    #agi.appexec('festival','Press 1 for sales ')
-    #agi.appexec('festival','Press 2 for customer support ')
-    #agi.hangup()
-    #agi.goto_on_exit(extension='1234', priority='1')
-    #sys.exit(0)
-    #agi.say_digits('123', [4,'5',6])
-    #agi.say_digits([4,5,6])
-    #agi.say_number('1234')
-    #agi.say_number('01234')  # 668
-    #agi.say_number('0xf5')   # 245
+    # agi.appexec('festival','Welcome to Klass Technologies.  Thank you for calling.')
+    # agi.appexec('festival','This is a test of the text to speech engine.')
+    # agi.appexec('festival','Press 1 for sales ')
+    # agi.appexec('festival','Press 2 for customer support ')
+    # agi.hangup()
+    # agi.goto_on_exit(extension='1234', priority='1')
+    # sys.exit(0)
+    # agi.say_digits('123', [4,'5',6])
+    # agi.say_digits([4,5,6])
+    # agi.say_number('1234')
+    # agi.say_number('01234')  # 668
+    # agi.say_number('0xf5')   # 245
     agi.get_data('demo-congrats')
     agi.hangup()
     sys.exit(0)
-    #agi.record_file('pyst-test') #FAILS
-    #agi.stream_file('demo-congrats', [1,2,3,4,5,6,7,8,9,0,'#','*'])
-    #agi.appexec('background','demo-congrats')
+    # agi.record_file('pyst-test') #FAILS
+    # agi.stream_file('demo-congrats', [1,2,3,4,5,6,7,8,9,0,'#','*'])
+    # agi.appexec('background','demo-congrats')
 
     try:
         agi.appexec('backgrounder', 'demo-congrats')
