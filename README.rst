@@ -2,19 +2,19 @@ pyst2: A Python Interface to Asterisk
 =====================================
 
 .. image:: https://img.shields.io/pypi/v/pyst2.svg
-    :alt: pyst2 Release
+:alt: pyst2 Release
     :target: https://pypi.python.org/pypi/pyst2
 
 .. image:: https://img.shields.io/pypi/dm/pyst2.svg
-    :alt: pyst2 Downloads
+:alt: pyst2 Downloads
     :target: https://pypi.python.org/pypi/pyst2
 
 .. image:: https://img.shields.io/travis/rdegges/pyst2.svg
-    :alt: pyst2 Build
+:alt: pyst2 Build
     :target: https://travis-ci.org/rdegges/pyst2
 
 .. image:: https://github.com/rdegges/pyst2/raw/master/assets/snake-sketch.jpg
-   :alt: Snake Sketch
+:alt: Snake Sketch
 
 
 Meta
@@ -63,6 +63,7 @@ To install ``pyst2``, simply run:
 .. code-block:: console
 
     $ pip install pyst2
+    $ pip install -U Unidecode
 
 This will install the latest version of the library automatically.
 
