@@ -3,6 +3,7 @@
 *.sw?
 *~
 .coverage
+.idea/*
 
 # Build remnants.
 html
